@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | Votre Plateforme</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette cohérente */
+            --primary-color: #6366f1; /* Un indigo moderne */
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 420px;
+            /* Animation d'entrée */
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        /* Style pour transformer le form.as_p de Django */
+        form p {
+            margin-bottom: 1.25rem;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        form input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            transition: all var(--transition-speed) ease;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.8rem;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            color: white;
+            transition: transform 0.2s, background-color 0.2s;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background-color: #4f46e5;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .auth-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+    <div class="text-center mb-4">
+        <h2 class="h4">Ravi de vous revoir</h2>
+        <p class="text-muted small">Veuillez entrer vos identifiants</p>
+    </div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        {# Le form.as_p va générer les inputs qui seront stylisés par notre CSS #}
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-submit w-100">
+            Se connecter
+        </button>
+    </form>
+
+    <div class="auth-footer mt-4">
+        Pas encore de compte ? 
+        <a href="{% url 'accounts:register' %}">Créer un compte</a>
+    </div>
+</div>
+
+</body>
+</html>
