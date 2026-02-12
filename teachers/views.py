@@ -1,29 +1,28 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import TeacherProfileForm
-from .models import Teacher
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect, render
 
-def get_or_create_teacher(user):
-    teacher, created = Teacher.objects.get_or_create(
-        user=user,
-        defaults={
-            'nom': user.username,
-            'prenom': '',
-            'specialite': ''
-        }
-    )
-    return teacher
+from .forms import TeacherProfileForm
+from .utils import get_or_create_teacher
+
+
+def is_teacher(user):
+    if user.role == "TEACHER":
+        return True
+    raise PermissionDenied
+
 
 @login_required
+@user_passes_test(is_teacher)
 def teacher_profile(request):
     teacher = get_or_create_teacher(request.user)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = TeacherProfileForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
-            return redirect('teachers:profile')
+            return redirect("teachers:profile")
     else:
         form = TeacherProfileForm(instance=teacher)
 
-    return render(request, 'teachers/profile.html', {'form': form})
+    return render(request, "teachers/profile.html", {"form": form})

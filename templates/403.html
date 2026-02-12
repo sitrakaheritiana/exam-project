@@ -1,95 +1,40 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}Accès Interdit | 403{% endblock %}
+{% block title %}Accès refusé (403){% endblock %}
 
 {% block content %}
 <style>
-    /* Centrage spécifique pour le bloc de contenu */
-    .error-container {
+    .error-wrap {
         display: flex;
-        align-items: center;
         justify-content: center;
-        min-height: 65vh;
+        min-height: 60vh;
+        align-items: center;
     }
-
     .error-card {
-        background: #ffffff;
-        padding: 3.5rem 2.5rem;
-        border-radius: 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-        width: 100%;
-        max-width: 480px;
+        max-width: 520px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 2rem;
         text-align: center;
-        border: 1px solid rgba(226, 232, 240, 0.8);
-        /* Animation fluide héritée de la charte */
-        animation: fadeInScale 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
-
-    @keyframes fadeInScale {
-        from { opacity: 0; transform: scale(0.95) translateY(10px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .error-code {
-        font-size: 5rem;
+    .code {
+        font-size: 4rem;
         font-weight: 800;
         color: var(--primary-color);
         line-height: 1;
-        margin-bottom: 1rem;
-        opacity: 0.15;
-        letter-spacing: -2px;
-    }
-
-    .icon-lock {
-        width: 70px;
-        height: 70px;
-        background: rgba(99, 102, 241, 0.08);
-        color: var(--primary-color);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-    }
-
-    .btn-action {
-        background-color: var(--primary-color);
-        border: none;
-        padding: 0.9rem 2rem;
-        font-weight: 600;
-        border-radius: 0.75rem;
-        color: white !important;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        display: inline-block;
-    }
-
-    .btn-action:hover {
-        background-color: var(--primary-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+        margin-bottom: 0.75rem;
     }
 </style>
 
-<div class="error-container">
+<div class="error-wrap">
     <div class="error-card">
-        <div class="icon-lock">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-        </div>
-        
-        <div class="error-code">403</div>
-        <h2 class="mb-3">Accès restreint</h2>
+        <div class="code">403</div>
+        <h2 class="h4 mb-2">Accès interdit</h2>
         <p class="text-muted mb-4">
-            Désolé, vos privilèges actuels ne vous permettent pas d'accéder à cette ressource. 
-            Si c'est inhabituel, merci de contacter le support technique.
+            Vous n'avez pas les autorisations nécessaires pour accéder à cette page.
         </p>
-
-        <a href="{% url 'dashboard:dashboard' %}" class="btn-action">
-            Retour au tableau de bord
-        </a>
+        <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary">Retour au tableau de bord</a>
     </div>
 </div>
 {% endblock %}

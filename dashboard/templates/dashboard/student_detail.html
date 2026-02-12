@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Detail Etudiant | Administration{% endblock %}
+
+{% block content %}
+<style>
+    .detail-wrap {
+        max-width: 860px;
+        margin: 0 auto;
+    }
+    .detail-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1.25rem;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+    }
+    .detail-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        background: #f8fafc;
+    }
+    .avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 999px;
+        object-fit: cover;
+        border: 2px solid #e2e8f0;
+        background: #eef2ff;
+    }
+    .avatar-fallback {
+        width: 72px;
+        height: 72px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: var(--primary-color);
+        background: rgba(99, 102, 241, 0.12);
+        border: 2px solid rgba(99, 102, 241, 0.25);
+    }
+    .name {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin: 0;
+        color: var(--text-dark);
+    }
+    .sub {
+        color: #64748b;
+        margin: 0.25rem 0 0;
+        font-size: 0.9rem;
+    }
+    .detail-body {
+        padding: 1.5rem;
+    }
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+    .info-item {
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        background: #fff;
+    }
+    .info-label {
+        display: block;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #64748b;
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+    }
+    .info-value {
+        margin: 0;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+    .actions {
+        display: flex;
+        gap: 0.75rem;
+        padding: 1.25rem 1.5rem 1.5rem;
+        border-top: 1px solid #f1f5f9;
+    }
+</style>
+
+<div class="detail-wrap">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="fw-bold mb-0">Fiche Etudiant</h2>
+    </div>
+
+    <div class="detail-card">
+        <div class="detail-header">
+            {% if student.photo %}
+                <img src="{{ student.photo.url }}" alt="Photo de {{ student.nom }} {{ student.prenom }}" class="avatar">
+            {% else %}
+                <div class="avatar-fallback">
+                    {{ student.nom|slice:":1" }}{{ student.prenom|slice:":1" }}
+                </div>
+            {% endif %}
+
+            <div>
+                <h3 class="name">{{ student.nom }} {{ student.prenom }}</h3>
+                <p class="sub">Matricule: {{ student.matricule }}</p>
+            </div>
+        </div>
+
+        <div class="detail-body">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <p class="info-value">
+                        {% if student.user and student.user.email %}
+                            <a href="mailto:{{ student.user.email }}">{{ student.user.email }}</a>
+                        {% else %}
+                            Non renseigne
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Formation</span>
+                    <p class="info-value">
+                        {% if student.formation %}
+                            {{ student.formation.code }} - {{ student.formation.libelle }}
+                        {% else %}
+                            Non assignee
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="{% url 'dashboard:student_update' student.pk %}" class="btn btn-primary">Modifier</a>
+            <a href="{% url 'dashboard:students' %}" class="btn btn-outline-secondary">Retour a la liste</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

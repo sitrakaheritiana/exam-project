@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
 from .models import Formation
 from .forms import FormationForm
 
 def is_admin(user):
-    return user.role == 'ADMIN'
+    if user.role == 'ADMIN':
+        return True
+    raise PermissionDenied
 
 @login_required
 @user_passes_test(is_admin)

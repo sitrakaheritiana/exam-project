@@ -14,11 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib import admin
 from django.shortcuts import redirect
+from django.urls import include, path
+
+from . import views as config_views
 
 def home(request):
     if request.user.is_authenticated:
@@ -28,6 +30,8 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('debug/403/', config_views.preview_403, name='debug_403'),
+    path('debug/404/', config_views.preview_404, name='debug_404'),
     path('accounts/', include('accounts.urls')),
     path('students/', include('students.urls')),
     path('teachers/', include('teachers.urls')),
@@ -35,8 +39,10 @@ urlpatterns = [
     path('courses/', include('courses.urls')),
     path('grades/', include('grades.urls')),
     path('dashboard/', include('dashboard.urls')),
-    path('grades/', include('grades.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler403 = "config.views.custom_403"
+handler404 = "config.views.custom_404"

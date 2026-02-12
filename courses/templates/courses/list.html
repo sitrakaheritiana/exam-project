@@ -1,19 +1,15 @@
 {% extends 'base.html' %}
-{% load static %}
 
-{% block title %}Ressources & Cours | Plateforme Éducative{% endblock %}
+{% block title %}Ressources et Cours{% endblock %}
 
 {% block content %}
 <style>
-    /* Header Section */
     .header-section {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
     }
-
-    /* Card Table Container */
     .table-card {
         background: white;
         border-radius: 1.25rem;
@@ -21,174 +17,122 @@
         border: 1px solid #e2e8f0;
         overflow: hidden;
     }
-
-    .table { margin: 0; }
-
     .table thead th {
         background: #f8fafc;
         font-size: 0.75rem;
         text-transform: uppercase;
         font-weight: 700;
         color: #64748b;
-        padding: 1.25rem 1.5rem;
+        padding: 1rem 1.25rem;
         border: none;
-        letter-spacing: 0.05em;
     }
-
     .table tbody td {
-        padding: 1.25rem 1.5rem;
-        vertical-align: middle;
+        padding: 1rem 1.25rem;
         border-top: 1px solid #f1f5f9;
-        font-size: 0.9rem;
+        vertical-align: middle;
     }
-
-    /* PDF Link Badge */
-    .pdf-link {
-        display: inline-flex;
-        align-items: center;
-        color: #ef4444; /* Rouge PDF */
-        text-decoration: none;
-        font-weight: 600;
-        padding: 0.5rem 0.9rem;
-        background: #fef2f2;
-        border-radius: 0.6rem;
-        border: 1px solid rgba(239, 68, 68, 0.1);
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .pdf-link:hover {
-        background: #fee2e2;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
-        color: #dc2626;
-    }
-
-    /* Formation Tag */
     .formation-tag {
         background: rgba(99, 102, 241, 0.08);
         color: var(--primary-color);
-        padding: 0.4rem 0.8rem;
+        padding: 0.35rem 0.7rem;
         border-radius: 0.5rem;
         font-size: 0.75rem;
         font-weight: 700;
-        border: 1px solid rgba(99, 102, 241, 0.1);
     }
-
-    /* Action Buttons */
+    .pdf-link {
+        display: inline-flex;
+        align-items: center;
+        color: #ef4444;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.45rem 0.8rem;
+        background: #fef2f2;
+        border-radius: 0.6rem;
+        border: 1px solid rgba(239, 68, 68, 0.12);
+    }
     .btn-add {
         background-color: var(--primary-color);
         color: white !important;
-        border-radius: 0.8rem;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-        transition: all 0.3s;
-    }
-
-    .btn-add:hover {
-        background-color: var(--primary-hover);
-        transform: translateY(-2px);
-    }
-
-    .action-group {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-    }
-
-    .btn-edit-simple {
-        color: #475569;
+        border-radius: 0.75rem;
+        padding: 0.65rem 1.3rem;
         font-weight: 600;
         text-decoration: none;
-        font-size: 0.85rem;
-        padding: 0.4rem 0.8rem;
-        border-radius: 0.5rem;
-        transition: background 0.2s;
     }
-
+    .action-group {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+    .btn-edit-simple {
+        color: #334155;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.35rem 0.7rem;
+        border-radius: 0.5rem;
+    }
     .btn-edit-simple:hover {
         background: #f1f5f9;
-        color: var(--primary-color);
     }
-
     .btn-del-ghost {
-        color: #94a3b8;
-        background: transparent;
-        border: none;
-        padding: 0.4rem;
-        transition: all 0.2s;
-    }
-
-    .btn-del-ghost:hover {
         color: #ef4444;
-        transform: scale(1.1);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 0.35rem 0.7rem;
+        border-radius: 0.5rem;
     }
 </style>
 
 <div class="header-section">
     <div>
-        <h2 class="fw-bold">Ressources & Cours</h2>
-        <p class="text-muted small mb-0">Accédez aux supports pédagogiques par formation</p>
+        <h2 class="fw-bold mb-1">Ressources et Cours</h2>
+        <p class="text-muted small mb-0">Supports pedagogiques par formation</p>
     </div>
-    <a href="{% url 'courses:create' %}" class="btn btn-add d-flex align-items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="me-2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-        </svg>
-        Ajouter un cours
-    </a>
+    {% if user.role == 'ADMIN' or user.role == 'TEACHER' %}
+        <a href="{% url 'courses:create' %}" class="btn-add">Ajouter un cours</a>
+    {% endif %}
 </div>
 
 <div class="table-card">
-    <table class="table">
+    <table class="table mb-0">
         <thead>
             <tr>
-                <th>Titre du support</th>
+                <th>Titre</th>
                 <th>Formation</th>
-                <th>Intervenant</th>
+                <th>Enseignant</th>
                 <th>Document</th>
-                <th class="text-end">Actions</th>
+                {% if user.role == 'ADMIN' or user.role == 'TEACHER' %}
+                    <th class="text-end">Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for c in courses %}
-            <tr>
-                <td class="fw-bold text-dark">{{ c.titre }}</td>
-                <td>
-                    <span class="formation-tag">{{ c.formation.libelle }}</span>
-                </td>
-                <td class="text-muted">
-                    <span class="small fw-semibold">{{ c.enseignant.nom }}</span> 
-                    <span class="small text-uppercase" style="font-size: 0.7rem;">{{ c.enseignant.prenom|slice:":1" }}.</span>
-                </td>
-                <td>
-                    {% if c.fichier_pdf %}
-                        <a href="{{ c.fichier_pdf.url }}" target="_blank" class="pdf-link">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="me-2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                            </svg>
-                            Ouvrir PDF
-                        </a>
-                    {% else %}
-                        <span class="text-muted italic small">Aucun fichier</span>
+                <tr>
+                    <td class="fw-semibold">{{ c.titre }}</td>
+                    <td><span class="formation-tag">{{ c.formation.libelle }}</span></td>
+                    <td>{{ c.enseignant.nom }} {{ c.enseignant.prenom }}</td>
+                    <td>
+                        {% if c.fichier_pdf %}
+                            <a href="{{ c.fichier_pdf.url }}" target="_blank" class="pdf-link">Ouvrir PDF</a>
+                        {% else %}
+                            <span class="text-muted">Aucun fichier</span>
+                        {% endif %}
+                    </td>
+                    {% if user.role == 'ADMIN' or user.role == 'TEACHER' %}
+                        <td class="text-end">
+                            <div class="action-group">
+                                <a href="{% url 'courses:update' c.pk %}" class="btn-edit-simple">Modifier</a>
+                                <a href="{% url 'courses:delete' c.pk %}" class="btn-del-ghost">Supprimer</a>
+                            </div>
+                        </td>
                     {% endif %}
-                </td>
-                <td class="text-end">
-                    <div class="action-group">
-                        <a href="{% url 'courses:update' c.pk %}" class="btn-edit-simple">Modifier</a>
-                        <a href="{% url 'courses:delete' c.pk %}" class="btn-del-ghost" title="Supprimer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </a>
-                    </div>
-                </td>
-            </tr>
+                </tr>
             {% empty %}
-            <tr>
-                <td colspan="5" class="text-center py-5 text-muted italic">
-                    Aucun support de cours n'a été publié pour le moment.
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="{% if user.role == 'ADMIN' or user.role == 'TEACHER' %}5{% else %}4{% endif %}" class="text-center text-muted py-5">
+                        Aucun cours disponible.
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
