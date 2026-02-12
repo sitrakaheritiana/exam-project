@@ -4,6 +4,11 @@ from .models import Grade
 from .forms import GradeForm
 from students.utils import generate_transcript
 from django.db.models import Avg, Max, Min
+from django.http import FileResponse, Http404
+from students.views import get_or_create_student
+from .models import Grade
+from .utils import generate_transcript
+import os
 
 def is_teacher(user):
     return user.role == 'TEACHER'
@@ -51,3 +56,23 @@ def download_transcript_view(request):
     pdf_file = generate_transcript(student, grades)
     from django.http import FileResponse
     return FileResponse(open(pdf_file, 'rb'), as_attachment=True)
+
+
+@login_required
+def download_transcript(request):
+    if request.user.role != 'STUDENT':
+        raise Http404()
+
+    student = get_or_create_student(request.user)
+    grades = student.grades.all()
+
+    if not grades.exists():
+        raise Http404("Aucune note disponible")
+
+    pdf_path = generate_transcript(student, grades)
+
+    return FileResponse(
+        open(pdf_path, 'rb'),
+        as_attachment=True,
+        filename=os.path.basename(pdf_path)
+    )

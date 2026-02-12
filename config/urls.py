@@ -35,6 +35,7 @@ urlpatterns = [
     path('courses/', include('courses.urls')),
     path('grades/', include('grades.urls')),
     path('dashboard/', include('dashboard.urls')),
+    path('grades/', include('grades.urls')),
 ]
 
 if settings.DEBUG:

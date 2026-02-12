@@ -1,220 +1,196 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestion des Cours</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
 
-    <style>
-      :root {
-        --primary-color: #6366f1;
-        --bg-color: #f8fafc;
-        --text-main: #1e293b;
-        --pdf-color: #ef4444;
-      }
-      
-      body {
-        background-color: var(--bg-color);
-        font-family: 'Inter', sans-serif;
-        color: var(--text-main);
-        padding: 40px 20px;
-      }
-      
-      .header-section {
+{% block title %}Ressources & Cours | Plateforme Éducative{% endblock %}
+
+{% block content %}
+<style>
+    /* Header Section */
+    .header-section {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 2.5rem;
-      }
-      
-      h2 {
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        margin: 0;
-      }
-      
-      .table-card {
+    }
+
+    /* Card Table Container */
+    .table-card {
         background: white;
         border-radius: 1.25rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         border: 1px solid #e2e8f0;
         overflow: hidden;
-        animation: fadeIn 0.5s ease-out;
-      }
-      
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      
-      .table {
-        margin: 0;
-      }
-      
-      .table thead th {
+    }
+
+    .table { margin: 0; }
+
+    .table thead th {
         background: #f8fafc;
         font-size: 0.75rem;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 700;
         color: #64748b;
         padding: 1.25rem 1.5rem;
         border: none;
-      }
-      
-      .table tbody td {
+        letter-spacing: 0.05em;
+    }
+
+    .table tbody td {
         padding: 1.25rem 1.5rem;
         vertical-align: middle;
         border-top: 1px solid #f1f5f9;
         font-size: 0.9rem;
-      }
-      
-      /* Lien PDF Stylisé */
-      .pdf-link {
+    }
+
+    /* PDF Link Badge */
+    .pdf-link {
         display: inline-flex;
         align-items: center;
-        color: var(--pdf-color);
+        color: #ef4444; /* Rouge PDF */
         text-decoration: none;
-        font-weight: 500;
-        padding: 0.4rem 0.8rem;
+        font-weight: 600;
+        padding: 0.5rem 0.9rem;
         background: #fef2f2;
-        border-radius: 0.5rem;
-        transition: all 0.2s;
-      }
-      
-      .pdf-link:hover {
+        border-radius: 0.6rem;
+        border: 1px solid rgba(239, 68, 68, 0.1);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .pdf-link:hover {
         background: #fee2e2;
-        transform: scale(1.02);
-      }
-      
-      /* Badges de catégorie (Formation) */
-      .formation-tag {
-        background: #eef2ff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+        color: #dc2626;
+    }
+
+    /* Formation Tag */
+    .formation-tag {
+        background: rgba(99, 102, 241, 0.08);
         color: var(--primary-color);
-        padding: 0.3rem 0.7rem;
-        border-radius: 0.4rem;
-        font-size: 0.8rem;
-        font-weight: 600;
-      }
-      
-      /* Boutons Actions */
-      .btn-add {
-        background-color: var(--primary-color);
-        color: white;
-        border-radius: 0.75rem;
-        padding: 0.7rem 1.5rem;
-        font-weight: 600;
-        border: none;
-        transition: all 0.3s;
-      }
-      
-      .btn-add:hover {
-        background-color: #4f46e5;
-        box-shadow: 0 8px 15px rgba(99, 102, 241, 0.3);
-      }
-      
-      .action-group {
-        display: flex;
-        gap: 8px;
-        justify-content: flex-end;
-      }
-      
-      .btn-edit-outline {
-        color: #475569;
-        border: 1px solid #e2e8f0;
-        background: transparent;
         padding: 0.4rem 0.8rem;
         border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border: 1px solid rgba(99, 102, 241, 0.1);
+    }
+
+    /* Action Buttons */
+    .btn-add {
+        background-color: var(--primary-color);
+        color: white !important;
+        border-radius: 0.8rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        transition: all 0.3s;
+    }
+
+    .btn-add:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+
+    .action-group {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .btn-edit-simple {
+        color: #475569;
+        font-weight: 600;
         text-decoration: none;
         font-size: 0.85rem;
-        transition: all 0.2s;
-      }
-      
-      .btn-edit-outline:hover {
-        background: #f1f5f9;
-        border-color: #cbd5e1;
-      }
-      
-      .btn-del-icon {
-        background: transparent;
-        border: 1px solid transparent;
-        color: #94a3b8;
-        padding: 0.4rem;
-        transition: color 0.2s;
-      }
-      
-      .btn-del-icon:hover {
-        color: var(--pdf-color);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header-section">
-        <div>
-          <h2>Ressources & Cours</h2>
-          <p class="text-muted small">Consultez et gérez les supports pédagogiques</p>
-        </div>
-        <a href="{% url 'courses:create' %}" class="btn-add">+ Ajouter un cours</a>
-      </div>
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.5rem;
+        transition: background 0.2s;
+    }
 
-      <div class="table-card">
-        <table class="table">
-          <thead>
+    .btn-edit-simple:hover {
+        background: #f1f5f9;
+        color: var(--primary-color);
+    }
+
+    .btn-del-ghost {
+        color: #94a3b8;
+        background: transparent;
+        border: none;
+        padding: 0.4rem;
+        transition: all 0.2s;
+    }
+
+    .btn-del-ghost:hover {
+        color: #ef4444;
+        transform: scale(1.1);
+    }
+</style>
+
+<div class="header-section">
+    <div>
+        <h2 class="fw-bold">Ressources & Cours</h2>
+        <p class="text-muted small mb-0">Accédez aux supports pédagogiques par formation</p>
+    </div>
+    <a href="{% url 'courses:create' %}" class="btn btn-add d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="me-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+        Ajouter un cours
+    </a>
+</div>
+
+<div class="table-card">
+    <table class="table">
+        <thead>
             <tr>
-              <th>Titre du support</th>
-              <th>Formation</th>
-              <th>Intervenant</th>
-              <th>Document</th>
-              <th class="text-end">Actions</th>
+                <th>Titre du support</th>
+                <th>Formation</th>
+                <th>Intervenant</th>
+                <th>Document</th>
+                <th class="text-end">Actions</th>
             </tr>
-          </thead>
-          <tbody>
+        </thead>
+        <tbody>
             {% for c in courses %}
-              <tr>
-                <td class="fw-semibold text-dark">{{ c.titre }}</td>
+            <tr>
+                <td class="fw-bold text-dark">{{ c.titre }}</td>
                 <td>
-                  <span class="formation-tag">{{ c.formation.libelle }}</span>
+                    <span class="formation-tag">{{ c.formation.libelle }}</span>
                 </td>
-                <td class="text-muted">{{ c.enseignant.nom }} {{ c.enseignant.prenom }}</td>
+                <td class="text-muted">
+                    <span class="small fw-semibold">{{ c.enseignant.nom }}</span> 
+                    <span class="small text-uppercase" style="font-size: 0.7rem;">{{ c.enseignant.prenom|slice:":1" }}.</span>
+                </td>
                 <td>
-                  {% if c.fichier_pdf %}
-                    <a href="{{ c.fichier_pdf.url }}" target="_blank" class="pdf-link">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="me-2" viewBox="0 0 16 16">
-                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                        <path d="M4.603 12.087a.81.81 0 0 1-.438-.42c-.195-.406-.139-.902.13-1.294.133-.193.35-.386.613-.559.13-.083.265-.16.402-.232.091-.048.18-.094.27-.139.19-.092.392-.162.61-.205.114-.022.23-.038.347-.047l.427-.03c.155-.008.303-.01.442-.008.204.004.385.018.533.044.17.03.313.078.412.148.051.037.086.082.104.134a.276.276 0 0 1 .012.103c0 .12-.047.241-.137.352-.09.112-.213.22-.36.315-.316.205-.733.344-1.226.417a.545.545 0 0 0-.256.095l-.105.064c-.217.135-.41.317-.577.545-.167.228-.291.498-.371.81a.59.59 0 0 1-.365.417c-.157.06-.328.082-.505.065a.69.69 0 0 1-.433-.18z" />
-                      </svg>PDF
-                    </a>
-                  {% else %}
-                    Aucun fichier
-                  {% endif %}
+                    {% if c.fichier_pdf %}
+                        <a href="{{ c.fichier_pdf.url }}" target="_blank" class="pdf-link">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" class="me-2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            Ouvrir PDF
+                        </a>
+                    {% else %}
+                        <span class="text-muted italic small">Aucun fichier</span>
+                    {% endif %}
                 </td>
                 <td class="text-end">
-                  <div class="action-group">
-                    <a href="{% url 'courses:update' c.pk %}" class="btn-edit-outline">Modifier</a>
-                    <form method="post" action="{% url 'courses:delete' c.pk %}" style="display:inline;">
-                      {% csrf_token %}
-                      <button type="submit" class="btn-del-icon" title="Supprimer">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </form>
-                  </div>
+                    <div class="action-group">
+                        <a href="{% url 'courses:update' c.pk %}" class="btn-edit-simple">Modifier</a>
+                        <a href="{% url 'courses:delete' c.pk %}" class="btn-del-ghost" title="Supprimer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </a>
+                    </div>
                 </td>
-              </tr>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center py-5 text-muted italic">
+                    Aucun support de cours n'a été publié pour le moment.
+                </td>
+            </tr>
             {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </body>
-</html>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,142 +1,98 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Enseignant | Profil</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary-color: #6366f1; /* On garde ton Indigo signature */
-            --bg-color: #f8fafc;
-            --text-main: #1e293b;
-            --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        }
 
-        body {
-            background-color: var(--bg-color);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-            padding: 40px 0;
-        }
+{% block title %}Mon Profil Enseignant{% endblock %}
 
-        .profile-container {
-            max-width: 650px; /* Légèrement plus large pour le confort */
-            margin: 0 auto;
-            animation: fadeInSlide 0.6s ease-out;
-        }
+{% block content %}
+<style>
+    /* Spécifique au formulaire de profil */
+    .profile-wrapper {
+        display: flex;
+        justify-content: center;
+        padding-top: 2rem;
+    }
 
-        @keyframes fadeInSlide {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .profile-card {
+        background: #ffffff;
+        padding: 2.5rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(226, 232, 240, 0.8);
+        width: 100%;
+        max-width: 600px;
+        /* L'animation globale est dans base.html, on peut ajouter un délai ici */
+        animation-delay: 0.1s;
+    }
 
-        .profile-card {
-            background: #ffffff;
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        border-bottom: 1px solid #f1f5f9;
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+    }
 
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            border-bottom: 1px solid #f1f5f9;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-        }
+    .icon-badge {
+        width: 50px;
+        height: 50px;
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--primary-color);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .icon-badge {
-            width: 50px;
-            height: 50px;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary-color);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    /* Stylisation des champs Django form.as_p */
+    form p {
+        margin-bottom: 1.5rem;
+    }
 
-        h2 {
-            font-weight: 700;
-            font-size: 1.5rem;
-            margin: 0;
-            letter-spacing: -0.5px;
-        }
+    form label {
+        display: block;
+        font-weight: 600;
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-bottom: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
 
-        /* Stylisation Django form.as_p */
-        form p {
-            margin-bottom: 1.5rem;
-        }
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.8rem;
+        background-color: #fff;
+        transition: all 0.3s ease;
+    }
 
-        form label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-bottom: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+    form input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
 
-        form input, form select, form textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.8rem;
-            background-color: #fff;
-            transition: all 0.3s ease;
-        }
+    .btn-save {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        border-radius: 0.8rem;
+        color: white !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 1rem;
+    }
 
-        form input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-        }
+    .btn-save:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.3);
+    }
+</style>
 
-        /* Bouton Action */
-        .btn-save {
-            background-color: var(--primary-color);
-            border: none;
-            padding: 1rem;
-            font-weight: 600;
-            border-radius: 0.8rem;
-            color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-top: 1rem;
-        }
-
-        .btn-save:hover {
-            background-color: #4f46e5;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
-        }
-
-        .footer-nav {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .back-link {
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .back-link:hover {
-            color: var(--primary-color);
-        }
-    </style>
-</head>
-<body>
-
-<div class="container profile-container">
+<div class="profile-wrapper">
     <div class="profile-card">
         <div class="profile-header">
             <div class="icon-badge">
@@ -146,7 +102,7 @@
                 </svg>
             </div>
             <div>
-                <h2>Profil Enseignant</h2>
+                <h2 class="h4 mb-0 fw-bold">Profil Enseignant</h2>
                 <p class="text-muted small m-0">Gérez vos informations et spécialités</p>
             </div>
         </div>
@@ -154,7 +110,7 @@
         <form method="post">
             {% csrf_token %}
             
-            <div class="form-grid">
+            <div class="form-body">
                 {{ form.as_p }}
             </div>
 
@@ -162,14 +118,12 @@
                 Mettre à jour mon profil
             </button>
         </form>
-    </div>
-
-    <div class="footer-nav">
-        <a href="javascript:history.back()" class="back-link">
-            ← Retour au panneau de contrôle
-        </a>
+        
+        <div class="text-center mt-4">
+            <a href="javascript:history.back()" class="text-decoration-none small text-muted">
+                ← Annuler et retourner
+            </a>
+        </div>
     </div>
 </div>
-
-</body>
-</html>
+{% endblock %}
