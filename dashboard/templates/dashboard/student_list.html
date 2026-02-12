@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gestion des Étudiants | Administration{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+    }
+
+    .table { margin: 0; }
+
+    .table thead th {
+        background: #f8fafc;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+        padding: 1.25rem 1.5rem;
+        border: none;
+    }
+
+    .table tbody td {
+        padding: 1.1rem 1.5rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+    }
+
+    /* Avatar stylisé */
+    .avatar-circle {
+        width: 38px;
+        height: 38px;
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 0.8rem;
+        margin-right: 12px;
+        border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .student-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .email-link {
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.85rem;
+    }
+
+    .email-link:hover {
+        color: var(--primary-color);
+    }
+
+    .btn-view {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.6rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #475569;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-view:hover {
+        background: white;
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        box-shadow: 0 4px 10px rgba(99, 102, 241, 0.1);
+    }
+</style>
+
+<div class="page-header">
+    <div>
+        <h2 class="fw-bold mb-1">Liste des Étudiants</h2>
+        <p class="text-muted small mb-0">Total : {{ students|length }} inscrits dans le système</p>
+    </div>
+    <a href="{% url 'dashboard:student_create' %}" class="btn btn-primary px-4 py-2 fw-bold shadow-sm" style="border-radius: 0.8rem;">
+        + Nouvel Étudiant
+    </a>
+</div>
+
+<div class="table-card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Identité</th>
+                <th>Adresse Email</th>
+                <th class="text-end">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td>
+                    <div class="student-info">
+                        <div class="avatar-circle">
+                            {{ s.nom|slice:":1" }}{{ s.prenom|slice:":1" }}
+                        </div>
+                        <div>
+                            <span class="fw-bold d-block">{{ s.nom }} {{ s.prenom }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <a href="mailto:{{ s.user.email }}" class="email-link">
+                        {{ s.user.email }}
+                    </a>
+                </td>
+                <td class="text-end">
+                    <a href="{% url 'accounts:student_detail' s.pk %}" class="btn-view">
+                        Détails
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center py-5 text-muted">
+                    Aucun étudiant trouvé dans la base de données.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

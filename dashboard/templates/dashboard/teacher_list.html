@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Corps Enseignant | Administration{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+    }
+
+    .table { margin: 0; }
+
+    .table thead th {
+        background: #f8fafc;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+        padding: 1.25rem 1.5rem;
+        border: none;
+    }
+
+    .table tbody td {
+        padding: 1.1rem 1.5rem;
+        vertical-align: middle;
+        border-top: 1px solid #f1f5f9;
+        font-size: 0.9rem;
+    }
+
+    /* Avatar Enseignant (Nuance de Vert) */
+    .avatar-teacher {
+        width: 40px;
+        height: 40px;
+        background: #f0fdf4;
+        color: #16a34a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-weight: 700;
+        margin-right: 12px;
+        border: 1px solid #dcfce7;
+    }
+
+    .teacher-identity {
+        display: flex;
+        align-items: center;
+    }
+
+    /* Badge Spécialité */
+    .spec-badge {
+        background-color: #f1f5f9;
+        color: #475569;
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.6rem;
+        font-weight: 600;
+        font-size: 0.8rem;
+        display: inline-block;
+    }
+
+    .btn-manage {
+        background: white;
+        border: 1px solid #e2e8f0;
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .btn-manage:hover {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        background: #f8faff;
+    }
+</style>
+
+<div class="page-header">
+    <div>
+        <h2 class="fw-bold mb-1">Corps Enseignant</h2>
+        <p class="text-muted small mb-0">Gestion des professeurs et intervenants</p>
+    </div>
+    <a href="{% url 'dashboard:teacher_create' %}" class="btn btn-primary px-4 py-2 fw-bold shadow-sm" style="border-radius: 0.8rem;">
+        + Ajouter un Enseignant
+    </a>
+</div>
+
+<div class="table-card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Enseignant</th>
+                <th>Spécialité / Domaine</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in teachers %}
+            <tr>
+                <td>
+                    <div class="teacher-identity">
+                        <div class="avatar-teacher">
+                            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="fw-bold d-block text-dark">{{ t.nom }} {{ t.prenom }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <span class="spec-badge">
+                        {{ t.specialite|default:"Généraliste" }}
+                    </span>
+                </td>
+                <td class="text-end">
+                    <a href="{% url 'dashboard:teacher_update' t.pk %}" class="btn-manage">
+                        Modifier
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center py-5 text-muted">
+                    Aucun enseignant répertorié pour le moment.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
