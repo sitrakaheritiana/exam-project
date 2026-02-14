@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil public | EduPlatform{% endblock %}
+
+{% block content %}
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap");
+
+    .landing-shell {
+        --landing-ink: #0f172a;
+        --landing-surface: #fff8ef;
+        --landing-accent: #0f766e;
+        --landing-accent-soft: #14b8a6;
+        --landing-highlight: #f97316;
+    }
+
+    .hero-stage {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #fde5d0;
+        border-radius: 1.5rem;
+        padding: 3rem 2.25rem;
+        background:
+            radial-gradient(circle at 88% 22%, rgba(249, 115, 22, 0.18), transparent 48%),
+            radial-gradient(circle at 18% 82%, rgba(20, 184, 166, 0.22), transparent 50%),
+            var(--landing-surface);
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    }
+
+    .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.35rem 0.9rem;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid #f1ccb1;
+        color: #b45309;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .hero-title {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(1.9rem, 4vw, 3.2rem);
+        line-height: 1.07;
+        color: var(--landing-ink);
+        letter-spacing: -0.02em;
+    }
+
+    .hero-text {
+        color: #334155;
+        max-width: 52ch;
+        font-size: 1.02rem;
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.6rem;
+    }
+
+    .btn-hero-main {
+        border: none;
+        border-radius: 0.85rem;
+        background: linear-gradient(130deg, var(--landing-accent), var(--landing-accent-soft));
+        color: #fff;
+        font-weight: 700;
+        padding: 0.8rem 1.2rem;
+        box-shadow: 0 10px 22px rgba(15, 118, 110, 0.2);
+    }
+
+    .btn-hero-main:hover {
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .btn-hero-alt {
+        border-radius: 0.85rem;
+        border: 1px solid #0f766e;
+        color: #0f766e;
+        font-weight: 700;
+        padding: 0.8rem 1.2rem;
+        background: #fff;
+    }
+
+    .stats-panel {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .stat-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 1rem;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        animation: cardPop 0.7s ease both;
+    }
+
+    .stat-card:nth-child(2) { animation-delay: 0.08s; }
+    .stat-card:nth-child(3) { animation-delay: 0.16s; }
+    .stat-card:nth-child(4) { animation-delay: 0.24s; }
+
+    .stat-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #64748b;
+        letter-spacing: 0.03em;
+    }
+
+    .stat-value {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 1.8rem;
+        line-height: 1;
+        color: var(--landing-ink);
+    }
+
+    .features {
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .feature {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        padding: 1.2rem;
+        height: 100%;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .feature-kicker {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #f97316;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+    }
+
+    .feature-title {
+        font-family: "Space Grotesk", sans-serif;
+        margin-top: 0.45rem;
+        margin-bottom: 0.55rem;
+        color: #0f172a;
+        font-size: 1.05rem;
+    }
+
+    .feature p {
+        margin: 0;
+        color: #475569;
+        font-size: 0.94rem;
+    }
+
+    .quick-links {
+        margin-top: 2rem;
+        border-radius: 1rem;
+        border: 1px dashed #f1ccb1;
+        padding: 1.1rem 1.25rem;
+        background: #fff;
+    }
+
+    .quick-links p {
+        margin: 0 0 0.7rem;
+        color: #475569;
+    }
+
+    .quick-links .btn {
+        border-radius: 999px;
+        margin-right: 0.45rem;
+        margin-bottom: 0.45rem;
+    }
+
+    @keyframes cardPop {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 992px) {
+        .hero-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero-stage {
+            padding: 2rem 1.2rem;
+            border-radius: 1.1rem;
+        }
+
+        .features {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="landing-shell">
+    <section class="hero-stage">
+        <div class="hero-grid">
+            <div>
+                <span class="hero-tag">Campus numerique</span>
+                <h1 class="hero-title">Un accueil public, clair et accessible a tous.</h1>
+                <p class="hero-text">
+                    Bienvenue sur EduPlatform. Cette page est accessible sans connexion pour presenter la
+                    plateforme, ses parcours et ses espaces de suivi.
+                </p>
+
+                <div class="hero-actions">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard:dashboard' %}" class="btn btn-hero-main">Acceder a mon espace</a>
+                    {% else %}
+                        <a href="{% url 'accounts:register' %}" class="btn btn-hero-main">S inscrire</a>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-hero-alt">Connexion</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="stats-panel">
+                <article class="stat-card">
+                    <span class="stat-label">Etudiants</span>
+                    <strong class="stat-value">{{ stats.students }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Enseignants</span>
+                    <strong class="stat-value">{{ stats.teachers }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Formations actives</span>
+                    <strong class="stat-value">{{ stats.formations }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span class="stat-label">Cours disponibles</span>
+                    <strong class="stat-value">{{ stats.courses }}</strong>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <article class="feature">
+            <span class="feature-kicker">Suivi</span>
+            <h2 class="feature-title">Progression en un coup d oeil</h2>
+            <p>Consultez notes, moyenne et evolution par matiere dans un espace simple et lisible.</p>
+        </article>
+        <article class="feature">
+            <span class="feature-kicker">Pedagogie</span>
+            <h2 class="feature-title">Cours centralises</h2>
+            <p>Les contenus sont organises par formation pour fluidifier l'apprentissage quotidien.</p>
+        </article>
+        <article class="feature">
+            <span class="feature-kicker">Pilotage</span>
+            <h2 class="feature-title">Administration rapide</h2>
+            <p>La gestion des enseignants, etudiants et parcours reste structuree et efficace.</p>
+        </article>
+    </section>
+
+    <section class="quick-links">
+        <p>Navigation rapide:</p>
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-sm">Accueil public</a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline-primary btn-sm">Connexion</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm">Inscription</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard:dashboard' %}" class="btn btn-dark btn-sm">Mon tableau de bord</a>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
