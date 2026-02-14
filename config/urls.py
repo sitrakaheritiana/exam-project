@@ -17,19 +17,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.shortcuts import redirect
 from django.urls import include, path
 
 from . import views as config_views
 
-def home(request):
-    if request.user.is_authenticated:
-        return redirect('dashboard:dashboard')
-    return redirect('accounts:login')
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
+    path('', config_views.public_home, name='home'),
     path('debug/403/', config_views.preview_403, name='debug_403'),
     path('debug/404/', config_views.preview_404, name='debug_404'),
     path('accounts/', include('accounts.urls')),
