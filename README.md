@@ -90,8 +90,8 @@ Use this block on GitHub to make the repository attractive:
 ```md
 ## Live Preview
 
-- Demo URL: https://your-demo-link
-- Demo Video: https://your-video-link
+- Demo URL: [To be added after deployment]
+- Demo Video: [To be added after deployment]
 
 ## Screenshots
 
